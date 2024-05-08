@@ -1,0 +1,13 @@
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.center-p {
+  position: absolute;
+  top: 50%;
+  font-size: 3rem;
+  color: grey;
+}

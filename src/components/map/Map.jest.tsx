@@ -19,18 +19,18 @@ jest.mock('leaflet', () => ({
 
 describe('Map', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.clearAllMocks();  
     });
 
     it('renders a div element with the id "map" and class "map"', () => {
-        const { container } = render(<Map />);
+        const { container } = render(<Map changeState={true}/>);
         const mapDiv = container.querySelector('#mapid');
         expect(mapDiv).toBeInTheDocument();
         expect(mapDiv).toHaveClass('map');
     });
 
     it('initializes a Leaflet map when mounted', () => {
-        render(<Map />);
+        render(<Map changeState={true}/>);
 
         expect(Leaflet.map).toHaveBeenCalledTimes(1);
         expect(Leaflet.map).toHaveBeenCalledWith('mapid', expect.any(Object));
