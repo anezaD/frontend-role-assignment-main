@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "target": "es2018",
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "types": ["@testing-library/jest-dom", "node"]
+    },
+    "include": ["src/**/*", "./jest.setup.js"]
+}

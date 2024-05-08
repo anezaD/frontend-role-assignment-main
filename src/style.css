@@ -1,0 +1,5 @@
+@import '~leaflet/dist/leaflet';
+
+h1 {
+    color: red;
+}
