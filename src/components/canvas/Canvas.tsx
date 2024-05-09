@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 import { LeafletFabricLayer } from './leaflet-extensions.config';
 import * as Leaflet from 'leaflet';
 import { fabric } from 'fabric';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from '../../redux/store';
+import { removePlayerAction, showNotificationAction } from '../../redux/game/reducer';
 import { getGamePlayers } from '../../redux/game/selectors';
 
-export default function Canvas({ map, changeState }: { map: Leaflet.Map, changeState:boolean }) : null {
-    
+export default function Canvas({ map, changeState }: { map: Leaflet.Map, changeState: boolean }): null {
+
     const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(
         null
     );
+    const dispatch = useDispatch();
 
     const PLAYERS_DATA = useSelector((state: RootState) => getGamePlayers(state))
 
@@ -32,17 +34,16 @@ export default function Canvas({ map, changeState }: { map: Leaflet.Map, changeS
 
     useEffect(() => {
         if (fabricCanvas) {
-            fabricCanvas.getObjects().forEach(function(obj) {
+            fabricCanvas.getObjects().forEach(function (obj) {
                 obj.visible = changeState;
             });
             fabricCanvas.renderAll(); // This updates the canvas to reflect changes
         }
-    },[changeState]);
+    }, [changeState]);
 
     useEffect(() => {
         if (fabricCanvas) {
             fabricCanvas.clear();
-
 
             PLAYERS_DATA.forEach(item => {
                 const latitude = item.position.latitude;
@@ -71,10 +72,15 @@ export default function Canvas({ map, changeState }: { map: Leaflet.Map, changeS
                     stroke: 'red',
                 });
 
+                shape.on('selected', function () {
+                    dispatch(removePlayerAction(item.id));
+                    dispatch(showNotificationAction({ name: item.name, id: item.id, team: item.teamName }))
+                    fabricCanvas.remove(shape);
+                });
+
                 return fabricCanvas.add(shape);
             });
         };
-
 
     }, [map, fabricCanvas, PLAYERS_DATA]);
 

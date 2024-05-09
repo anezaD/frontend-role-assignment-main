@@ -14,22 +14,22 @@ function App() {
         ExtendLeafletPrototypes();
     });
 
-    const [showMap,setShowMap] = useState<boolean>(false);
+    const [showMap, setShowMap] = useState<boolean>(false);
     const [changeState, setChangeState] = useState(false);
 
     const usersVisibilityHandler = (): void => {
         setShowMap(true);
-        setChangeState(state=>!state);
+        setChangeState(state => !state);
     }
-     
+
     return (
-        <>  
-            {showMap ? <Map changeState={changeState} /> : <CenterText text="Ready to play?"/>}
-            <Button className={changeState ? 'color-red' : ''} onClick={usersVisibilityHandler} text={changeState ? 'Hide Locations':'Show Locations'} />
+        <>
+            {showMap ? <Map changeState={changeState} /> : <CenterText text="Ready to play?" />}
+            <Button className={changeState ? 'color-red' : ''} onClick={usersVisibilityHandler} text={changeState ? 'Hide Locations' : 'Show Locations'} />
         </>
     );
 }
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
-root.render( <Provider store={store}> <App /> </Provider>);
+root.render(<Provider store={store}> <App /> </Provider>);

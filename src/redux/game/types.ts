@@ -1,3 +1,4 @@
+
 export type Player = {
     id: number;
     name: string;
@@ -11,3 +12,13 @@ export type Player = {
 export type GameState = {
     data: Player[];
 };
+
+export type NotificationState = {
+
+  notification: {
+    name: string;
+    id: number;
+    team: string;
+  } | null;
+
+}

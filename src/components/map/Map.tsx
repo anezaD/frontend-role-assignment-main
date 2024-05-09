@@ -1,7 +1,10 @@
 import './styles.css';
 import * as Leaflet from 'leaflet';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Canvas from '../canvas/Canvas';
+import Notifications from "../ui/notifications/Notifications"
+import { RootState } from "../../redux/store"
 
 export const LEAFLET_OPTIONS = {
     zoomControl: true,
@@ -11,6 +14,7 @@ export const LEAFLET_OPTIONS = {
 
 export default function Map({ changeState }: { changeState: boolean }) {
     const [map, setMap] = useState<Leaflet.Map | null>(null);
+    const notification = useSelector((state: RootState) => state.notification.notification);
 
     useEffect(() => {
         const newMap = Leaflet.map('mapid', LEAFLET_OPTIONS).setView(
@@ -29,6 +33,7 @@ export default function Map({ changeState }: { changeState: boolean }) {
     return (
         <div id='mapid' className='map'>
             {map && <Canvas map={map} changeState={changeState} />}
+            {notification && <Notifications name={notification.name} id={notification.id} team={notification.team} />}
         </div>
     );
 }
