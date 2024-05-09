@@ -70,25 +70,48 @@ export default function Canvas({ map, changeState }: { map: Leaflet.Map, changeS
                     const shape = team === 'red' ? new fabric.Circle({
                         left: point.x,
                         top: point.y,
-                        radius: 5 / resolution,
+                        radius: 10 / resolution,
                         fill: 'blue',
-                        strokeWidth: 2 / resolution,
+                        strokeWidth: 4 / resolution,
                         stroke: 'white',
+                        originX: 'center', // Set originX to center
+                        originY: 'center',  // Set originY to center
+                        selectable: false,
 
                     }) : new fabric.Rect({
                         left: point.x,
                         top: point.y,
-                        width: 10 / resolution,
-                        height: 10 / resolution,
+                        width: 20 / resolution,
+                        height: 20 / resolution,
                         fill: 'white',
-                        strokeWidth: 2 / resolution,
+                        strokeWidth: 4 / resolution,
                         stroke: 'red',
+                        originX: 'center', // Set originX to center
+                        originY: 'center',  // Set originY to center
+                        selectable: false,
                     });
 
-                    shape.on('selected', function () {
-                        dispatch(removePlayerAction(item.id));
-                        dispatch(showNotificationAction({ name: item.name, id: item.id, team: item.teamName }))
-                        fabricCanvas.remove(shape);
+                    shape.on('mousedown', function () {
+                        shape.animate('scaleX', '0', {
+                            onChange: fabricCanvas.renderAll.bind(fabricCanvas),
+                            duration: 1000,
+                            easing: fabric.util.ease.easeOutBounce,
+                            onComplete: function () {
+                                dispatch(removePlayerAction(item.id));
+                                dispatch(showNotificationAction({ name: item.name, id: item.id, team: item.teamName }))
+                                fabricCanvas.remove(shape);
+                            }
+                        });
+                        shape.animate('scaleY', '0', {
+                            onChange: fabricCanvas.renderAll.bind(fabricCanvas),
+                            duration: 1000,
+                            easing: fabric.util.ease.easeOutBounce,
+                        });
+                        shape.animate('angle', '+=360', {
+                            onChange: fabricCanvas.renderAll.bind(fabricCanvas),
+                            duration: 1000,
+                            easing: fabric.util.ease.easeOutBounce,
+                        });
                     });
 
                     return fabricCanvas.add(shape);
